@@ -1,8 +1,12 @@
-import { express } from 'express';
-const app = express()
+import express from 'express';
+import prisma from '@prisma/client'
 
-const prisma = require('@prisma/client');
+const app = express();
 
-express.post('/room/create', function (req, res) {
-    
+app.get('/room/create', function (req, res) {
+    prisma.
 });
+
+app.listen(8080);
+
+console.log('listening')
