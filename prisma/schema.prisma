@@ -15,13 +15,17 @@ model User {
 
   nickname String
   Message  Message[]
+  Room     Room[]
 }
 
 model Room {
   id String @id() @default(uuid())
 
   roomName String
-  Message  Message[]
+
+  owner   User      @relation(fields: [userId], references: [id])
+  Message Message[]
+  userId  Int
 }
 
 model Message {
@@ -33,4 +37,6 @@ model Message {
   messageContent String
   roomId         String
   userId         Int
+
+  date DateTime @default(now())
 }
