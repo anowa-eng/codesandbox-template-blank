@@ -1,22 +1,21 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 
+import http from "node:http";
+import Server from "socket.io";
+
 const app = express();
 const prisma = new PrismaClient();
 
 app.post("/room/create", async function (req, res) {
-  try {
-    let roomName = decodeURIComponent(req.query.roomName),
-      userId = parseInt(req.query.userId);
+  let roomName = decodeURIComponent(req.query.roomName),
+    userId = parseInt(req.query.userId);
 
-    let room = await prisma.room.create({
-      data: { roomName, userId },
-    });
+  let room = await prisma.room.create({
+    data: { roomName, userId },
+  });
 
-    res.send(room);
-  } catch (error) {
-    res.end(error);
-  }
+  res.send(room);
 });
 
 app.get("/room/get", async function (req, res) {
@@ -53,8 +52,12 @@ app.post("/room/update", async function (req, res) {
 
 app.post("/room/delete", async function (req, res) {
   let id = req.query.id;
+
+  await prisma.room.delete({
+    where: { id },
+  });
+
+  res.end();
 });
 
-app.listen(8080);
-
-console.log("listening");
+export default app;
